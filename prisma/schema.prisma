@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MembershipRole {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum PaymentType {
+  CASH
+  UPI
+}
+
+model User {
+  id           Int          @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String       @unique
+  mobileNumber String       @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+  Book         Book[]
+  Membership   Membership[]
+  Account      Account[]
+}
+
+model Book {
+  id         Int          @id @default(autoincrement())
+  name       String
+  createdAt  DateTime     @default(now())
+  owner      User         @relation(fields: [userId], references: [id])
+  userId     Int
+  Membership Membership[]
+  Account    Account[]
+  // Todo: default: if user has multiple books, one can be default
+}
+
+model Membership {
+  book    Book           @relation(fields: [bookId], references: [id])
+  bookId  Int
+  user    User           @relation(fields: [userId], references: [id])
+  userId  Int
+  role    MembershipRole @default(CUSTOMER)
+  Account Account[]
+  //Todo: premissions: resource wise permissions
+
+  @@unique([bookId, userId])
+  @@index([bookId, userId])
+}
+
+model Account {
+  id          Int           @id @default(autoincrement())
+  memeberShip Membership    @relation(fields: [membershipBookId, membershipUserId], references: [bookId, userId])
+  amount      Float
+  openedAt    DateTime
+  dueDate     DateTime
+  closedAt    DateTime
+  Transaction Transaction[]
+
+  User             User? @relation(fields: [userId], references: [id])
+  userId           Int?
+  Book             Book? @relation(fields: [bookId], references: [id])
+  bookId           Int?
+  membershipBookId Int
+  membershipUserId Int
+}
+
+model Transaction {
+  id          Int         @id @default(autoincrement())
+  date        DateTime
+  amount      Float
+  paymentType PaymentType
+  accountId   Int
+  account     Account     @relation(fields: [accountId], references: [id])
+  // Todo: createdBy, approvedBy, deleted
+}
+
+model ExpenseItem {
+  id          Int       @id @default(autoincrement())
+  description String
+  amount      Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  Expense     Expense[]
+}
+
+model Expense {
+  id        Int         @id @default(autoincrement())
+  item      ExpenseItem @relation(fields: [itemId], references: [id])
+  itemId    Int
+  date      DateTime
+  createdAt DateTime    @default(now())
+}
