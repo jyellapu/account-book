@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { SquareUser, BadgeIndianRupee, BookText } from "lucide-react";
-import "./globals.css";
+import "@/app/ui/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,31 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="h-screen flex flex-col">
-          <header className="w-full h-12 bg-subtle flex flex-shrink-0 items-center border-b sticky top-0">
-            <h1 className="pl-4 text-lg">Account1</h1>
-          </header>
-          <div className="flex-grow p-4 md:overflow-y-auto md:p-8">
-            {children}
-          </div>
-          {/* Mobile Navigation */}
-          <div className="bg-subtle w-full h-16 flex items-center justify-evenly border-t fixed bottom-0 left-0">
-            <div className="flex flex-grow flex-col justify-center items-center ">
-              <SquareUser className="mb-1" size={24} />
-              <p className="text-sm text-center">Parties</p>
-            </div>
-            <div className="flex flex-grow flex-col justify-center items-center text-muted-foreground">
-              <BadgeIndianRupee className="mb-1" size={24} />
-              <p className="text-sm text-center">Expenses</p>
-            </div>
-            <div className="flex flex-grow flex-col justify-center items-center text-muted-foreground">
-              <BookText className="mb-1" size={24} />
-              <p className="text-sm text-center">DailySlips</p>
-            </div>
-          </div>
-        </div>
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
