@@ -1,10 +1,10 @@
 "use client";
 
-import { HomeIcon, SquareUser, BadgeIndianRupee, BookText } from "lucide-react";
+import { BadgeIndianRupee, BookText, HomeIcon, SquareUser } from "lucide-react";
 
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import clsx from "clsx";
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -21,8 +21,9 @@ const links = [
 
 export default function NavLinks() {
   const pathname = usePathname();
-
-  console.log(pathname);
+  const bookId = pathname.split("/")[2];
+  const prefixPath = `/books/${bookId}`;
+  console.log(bookId);
   return (
     <>
       {links.map((link) => {
@@ -30,7 +31,7 @@ export default function NavLinks() {
         return (
           <Link
             key={link.name}
-            href={link.href}
+            href={prefixPath + link.href}
             className={clsx(
               "flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium text-secondary-foreground bg-secondary hover:bg-secondary/80 md:flex-none md:justify-start md:p-2 md:px-3",
               {
