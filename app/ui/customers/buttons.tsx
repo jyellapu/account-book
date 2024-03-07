@@ -1,14 +1,13 @@
-// import { deleteInvoice } from '@/app/lib/actions';
 import { deleteCustomer } from "@/app/lib/actions/customer/actions";
 import { Button } from "@/components/ui/button";
 import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 
-export function AddCustomer() {
+export function AddCustomer({ bookId }: { bookId: number }) {
   return (
     <Button asChild>
       <Link
-        href="/dashboard/customers/create"
+        href={`/books/${bookId}/dashboard/customers/create`}
         className="flex h-10 items-center rounded-md px-4 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         <span className="hidden md:block">Add Customer</span>{" "}
@@ -18,18 +17,32 @@ export function AddCustomer() {
   );
 }
 
-export function UpdateCustomer({ id }: { id: number }) {
+export function UpdateCustomer({
+  bookId,
+  customerId,
+}: {
+  bookId: number;
+  customerId: number;
+}) {
   return (
     <Button className="rounded-md border p-2" variant="default" asChild>
-      <Link href={`/dashboard/customers/${id}`}>
+      <Link href={`/books/${bookId}/dashboard/customers/${customerId}`}>
         <PencilIcon className="w-5" />
       </Link>
     </Button>
   );
 }
 
-export function DeleteCustomer({ id }: { id: number }) {
-  const deleteCustomerWithId = deleteCustomer.bind(null, id);
+export function DeleteCustomer({
+  bookId,
+  customerId,
+}: {
+  bookId: number;
+  customerId: number;
+}) {
+  const deleteCustomerWithId = deleteCustomer
+    .bind(null, bookId)
+    .bind(null, customerId);
   return (
     <>
       <form action={deleteCustomerWithId}>
