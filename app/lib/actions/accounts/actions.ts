@@ -54,6 +54,10 @@ export async function addAccount(prevState: State, formData: FormData) {
   // Prepare data for insertion into the database
   const { bookId, customerId, amount, openedAt, dueDate, paymentType } = validatedFields.data;
   try {
+    if (dueDate.getTime() < openedAt.getTime()) {
+      throw new Error('Due date is less than opened date.')
+    }
+
     const { bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
@@ -109,6 +113,10 @@ export async function updateAccount(accountId: number, formData: FormData) {
   // Prepare data for insertion into the database
   const { bookId, customerId, amount, openedAt, dueDate, status, paymentType } = validatedFields.data;
   try {
+    if (dueDate.getTime() < openedAt.getTime()) {
+      throw new Error('Due date is less than opened date.')
+    }
+
     const { bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
