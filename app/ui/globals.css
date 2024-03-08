@@ -51,6 +51,19 @@
   }
 }
 
+@layer utilities {
+  .remove-arrow::-webkit-inner-spin-button,
+  .remove-arrow::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .remove-arrow {
+    -moz-appearance: textfield;
+  }
+  .invert-cal-color::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}
   
  
 @layer base {
