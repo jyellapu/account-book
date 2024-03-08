@@ -66,7 +66,7 @@ export async function getDailySlipPages(bookId: number, date: string) {
     customerAccounts.forEach(customerAccount => {
       customerAccount.accounts.forEach(account => accountIds.push(account.id))
     })
-    return await prisma.transaction.count({
+    const count = await prisma.transaction.count({
       where: {
         accountId: {
           in: accountIds
@@ -74,6 +74,8 @@ export async function getDailySlipPages(bookId: number, date: string) {
         date: new Date(date)
       }
     })
+    const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
+    return totalPages;
   } catch (error) {
     console.log(error)
     throw new Error('Failed to get daily slip pages.')
