@@ -1,4 +1,4 @@
-import { updateCustomer } from "@/app/lib/actions/customer/actions";
+import { updateCustomer } from "@/app/lib/actions/customers/actions";
 import { Customer } from "@/app/lib/definitions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

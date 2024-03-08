@@ -1,4 +1,4 @@
-import { getFilteredCustomers } from "@/app/lib/actions/customer/actions";
+import { getFilteredCustomers } from "@/app/lib/actions/customers/actions";
 import CustomerCard from "./customer-card";
 
 export default async function CustomerCardTable({

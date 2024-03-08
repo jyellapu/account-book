@@ -1,7 +1,6 @@
 "use client";
 
 import { BadgeIndianRupee, BookText, HomeIcon, SquareUser } from "lucide-react";
-
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

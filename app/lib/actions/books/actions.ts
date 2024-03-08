@@ -159,7 +159,6 @@ export async function getBookById(id: number) {
 
 }
 
-
 export async function getFilteredAccountBooks(query: string, currentPage: number) {
   try {
     const { bookIds } = await getUserSession()

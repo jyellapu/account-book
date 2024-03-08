@@ -8,9 +8,7 @@ export default async function AccountBookTable({
   query: string;
   currentPage: number;
 }) {
-  // await new Promise((resolve) => setTimeout(resolve, 5 * 1000));
   const books = await getFilteredAccountBooks(query, currentPage);
-  console.log(books);
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
