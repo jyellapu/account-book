@@ -10,10 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum MembershipRole {
+enum StaffType {
   ADMIN
-  STAFF
-  CUSTOMER
+  EMPLOYEE
 }
 
 enum PaymentType {
@@ -21,83 +20,80 @@ enum PaymentType {
   UPI
 }
 
-model User {
-  id           Int          @id @default(autoincrement())
+enum AccountStatusType {
+  OPEN
+  CLOSED
+}
+
+model Staff {
+  id           Int           @id @default(autoincrement())
   firstName    String
   lastName     String
-  email        String       @unique
-  mobileNumber String       @unique
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
-  Book         Book[]
-  Membership   Membership[]
-  Account      Account[]
+  mobileNumber String        @unique
+  password     String
+  type         StaffType
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
+  books        Book[]
+  Transaction  Transaction[]
+}
+
+model Customer {
+  id           Int       @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  mobileNumber String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  accounts     Account[]
+  book         Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId       Int
 }
 
 model Book {
-  id         Int          @id @default(autoincrement())
-  name       String
-  createdAt  DateTime     @default(now())
-  owner      User         @relation(fields: [userId], references: [id])
-  userId     Int
-  Membership Membership[]
-  Account    Account[]
-  // Todo: default: if user has multiple books, one can be default
-}
-
-model Membership {
-  book    Book           @relation(fields: [bookId], references: [id])
-  bookId  Int
-  user    User           @relation(fields: [userId], references: [id])
-  userId  Int
-  role    MembershipRole @default(CUSTOMER)
-  Account Account[]
-  //Todo: premissions: resource wise permissions
-
-  @@unique([bookId, userId])
-  @@index([bookId, userId])
+  id        Int        @id @default(autoincrement())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  customers Customer[]
+  staff     Staff[]
+  expenses  Expense[]
 }
 
 model Account {
-  id          Int           @id @default(autoincrement())
-  memeberShip Membership    @relation(fields: [membershipBookId, membershipUserId], references: [bookId, userId])
-  amount      Float
-  openedAt    DateTime
-  dueDate     DateTime
-  closedAt    DateTime
-  Transaction Transaction[]
-
-  User             User? @relation(fields: [userId], references: [id])
-  userId           Int?
-  Book             Book? @relation(fields: [bookId], references: [id])
-  bookId           Int?
-  membershipBookId Int
-  membershipUserId Int
+  id           Int               @id @default(autoincrement())
+  amount       Float
+  openedAt     DateTime
+  dueDate      DateTime
+  status       AccountStatusType @default(OPEN)
+  paymentType  PaymentType
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @default(now())
+  transactions Transaction[]
+  customer     Customer          @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId   Int
 }
 
 model Transaction {
-  id          Int         @id @default(autoincrement())
-  date        DateTime
-  amount      Float
-  paymentType PaymentType
-  accountId   Int
-  account     Account     @relation(fields: [accountId], references: [id])
-  // Todo: createdBy, approvedBy, deleted
-}
-
-model ExpenseItem {
-  id          Int       @id @default(autoincrement())
-  description String
-  amount      Float
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  Expense     Expense[]
+  id               Int         @id @default(autoincrement())
+  date             DateTime
+  amount           Float
+  paymentType      PaymentType
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @default(now())
+  accountId        Int
+  account          Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createdByStaff   Staff?      @relation(fields: [createdByStaffId], references: [id])
+  createdByStaffId Int?
 }
 
 model Expense {
-  id        Int         @id @default(autoincrement())
-  item      ExpenseItem @relation(fields: [itemId], references: [id])
-  itemId    Int
+  id        Int      @id @default(autoincrement())
+  name      String
   date      DateTime
-  createdAt DateTime    @default(now())
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId    Int
 }
