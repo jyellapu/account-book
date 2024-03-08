@@ -1,6 +1,6 @@
 "use client";
 
-import { addCustomer } from "@/app/lib/actions/customers/actions";
+import { State, addCustomer } from "@/app/lib/actions/customers/actions";
 import { lusitana } from "@/app/ui/fonts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import { useFormState } from "react-dom";
 
 export default function Page({ params }: { params: { bookId: number } }) {
   const bookId = Number(params.bookId);
-  const initialState = { message: null, errors: {} };
+  const initialState: State = { message: null, errors: {} };
   const [state, dispatch] = useFormState(addCustomer, initialState);
 
   return (

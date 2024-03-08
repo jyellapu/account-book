@@ -1,6 +1,6 @@
 "use client";
 
-import { addBook } from "@/app/lib/actions/books/actions";
+import { State, addBook } from "@/app/lib/actions/books/actions";
 import AccountBookLogo from "@/app/ui/account-logo";
 import { lusitana } from "@/app/ui/fonts";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useFormState } from "react-dom";
 
 export default function Page() {
-  const initialState = { message: null, errors: {} };
+  const initialState: State = { message: null, errors: {} };
   const [state, dispatch] = useFormState(addBook, initialState);
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">

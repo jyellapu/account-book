@@ -1,6 +1,6 @@
 "use client";
 
-import { addTransaction } from "@/app/lib/actions/transactions/actions";
+import { State, addTransaction } from "@/app/lib/actions/transactions/actions";
 import { lusitana } from "@/app/ui/fonts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ export default function Page({
 }: {
   params: { bookId: number; customerId: number; accountId: number };
 }) {
-  const initialState = { message: null, errors: {} };
+  const initialState: State = { message: null, errors: {} };
   const [state, dispatch] = useFormState(addTransaction, initialState);
   const defaultTransactionDate = format(new Date(), "yyyy-MM-dd");
   return (

@@ -1,15 +1,9 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { SearchIcon } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
-import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-
-import { cn } from "@/lib/utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -17,6 +11,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { SelectSingleEventHandler } from "react-day-picker";
 
 export default function SearchByDate() {
   const [date, setDate] = React.useState<Date>(new Date());
@@ -24,8 +20,8 @@ export default function SearchByDate() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const handleSearch = (date: Date) => {
-    console.log(date);
+  const handleSearch: SelectSingleEventHandler = (date?: Date) => {
+    if (!date) return;
     setDate(date);
     const params = new URLSearchParams(searchParams);
     if (date) {

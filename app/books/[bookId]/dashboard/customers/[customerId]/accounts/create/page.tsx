@@ -1,6 +1,6 @@
 "use client";
 
-import { addAccount } from "@/app/lib/actions/accounts/actions";
+import { State, addAccount } from "@/app/lib/actions/accounts/actions";
 import { DEFAULT_DUE_DATE_INTERVAL_IN_DAYS } from "@/app/lib/constants";
 import { lusitana } from "@/app/ui/fonts";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ export default function Page({
 }: {
   params: { bookId: number; customerId: number };
 }) {
-  const initialState = { message: null, errors: {} };
+  const initialState: State = { message: null, errors: {} };
   const [state, dispatch] = useFormState(addAccount, initialState);
   const today = new Date();
   const defaultOpenedDate = format(today, "yyyy-MM-dd");
