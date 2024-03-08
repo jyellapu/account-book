@@ -11,7 +11,7 @@ const FormSchema = z.object({
   bookId: z.coerce.number(),
   name: z.string().min(2),
   date: z.coerce.date().max(new Date()),
-  amount: z.coerce.number(),
+  amount: z.coerce.number().min(0),
 })
 
 const AddExpense = FormSchema

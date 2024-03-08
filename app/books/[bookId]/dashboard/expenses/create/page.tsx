@@ -74,6 +74,7 @@ export default function Page({ params }: { params: { bookId: number } }) {
               name="amount"
               type="number"
               placeholder="Enter cost"
+              min={0}
               className="remove-arrow"
               required
             />

@@ -32,7 +32,7 @@ export default async function Page({
         <div className="flex w-full items-center justify-between mb-4">
           <h1 className={`${lusitana.className} text-xl`}>Edit Account Book</h1>
         </div>
-        <Form book={book}></Form>;
+        <Form book={book}></Form>
       </div>
     </div>
   );

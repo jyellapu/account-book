@@ -70,6 +70,7 @@ export default function Form({
             type="number"
             placeholder="Enter cost"
             className="remove-arrow"
+            min={0}
             defaultValue={expense.amount}
             required
           />
