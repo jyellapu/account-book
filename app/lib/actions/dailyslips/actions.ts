@@ -4,7 +4,6 @@ import { prisma } from "../../db";
 
 export async function getDailySlip(bookId: number, date: string, currentPage: number) {
   try {
-    await new Promise(resolve => setTimeout(resolve, 2000))
     const customerAccounts = await prisma.customer.findMany({
       where: {
         bookId: bookId

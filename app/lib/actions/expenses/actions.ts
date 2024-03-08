@@ -181,7 +181,6 @@ export async function getFilteredExpenses(bookId: number, date: string, currentP
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
     }
-    await new Promise(resolve => setTimeout(resolve, 2000))
     return await prisma.expense.findMany({
       where: {
         bookId: bookId,

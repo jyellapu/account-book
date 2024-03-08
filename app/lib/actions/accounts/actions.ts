@@ -205,7 +205,6 @@ export async function getFilteredCustomerAccounts(bookId: number, customerId: nu
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
     }
-    await new Promise(resolve => setTimeout(resolve, 2000))
     return await prisma.account.findMany({
       where: {
         customer: {
