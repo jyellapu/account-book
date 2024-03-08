@@ -52,10 +52,13 @@ export function DeleteAccount({
   customerId: number;
   accountId: number;
 }) {
-  const deleteAccountWithId = deleteAccount
-    .bind(null, bookId)
-    .bind(null, customerId)
-    .bind(null, accountId);
+  const deleteAccountWithId = deleteAccount.bind(
+    null,
+    bookId,
+    customerId,
+    accountId
+  );
+
   return (
     <>
       <form action={deleteAccountWithId}>

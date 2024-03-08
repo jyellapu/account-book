@@ -59,11 +59,13 @@ export function DeleteTransaction({
   transactionId: number;
 }) {
   console.log("Inside delete transaction %d %d", customerId, accountId);
-  const deleteTransactionWithId = deleteTransaction
-    .bind(null, bookId)
-    .bind(null, customerId)
-    .bind(null, accountId)
-    .bind(null, transactionId);
+  const deleteTransactionWithId = deleteTransaction.bind(
+    null,
+    bookId,
+    customerId,
+    accountId,
+    transactionId
+  );
   return (
     <>
       <form action={deleteTransactionWithId}>

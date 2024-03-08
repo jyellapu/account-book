@@ -1,4 +1,4 @@
-import { deleteCustomer } from "@/app/lib/actions/customer/actions";
+import { deleteCustomer } from "@/app/lib/actions/customers/actions";
 import { Button } from "@/components/ui/button";
 import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
@@ -40,9 +40,7 @@ export function DeleteCustomer({
   bookId: number;
   customerId: number;
 }) {
-  const deleteCustomerWithId = deleteCustomer
-    .bind(null, bookId)
-    .bind(null, customerId);
+  const deleteCustomerWithId = deleteCustomer.bind(null, bookId, customerId);
   return (
     <>
       <form action={deleteCustomerWithId}>

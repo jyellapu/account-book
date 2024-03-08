@@ -40,9 +40,7 @@ export function DeleteExpense({
   bookId: number;
   expenseId: number;
 }) {
-  const deleteExpenseWithId = deleteExpense
-    .bind(null, bookId)
-    .bind(null, expenseId);
+  const deleteExpenseWithId = deleteExpense.bind(null, bookId, expenseId);
   return (
     <>
       <form action={deleteExpenseWithId}>
