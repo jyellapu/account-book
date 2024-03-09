@@ -18,6 +18,13 @@ export const formatDateToLocal = (
     return formatter.format(date);
 };
 
+export const convertUTCtoUserTimezone = (utcTimestamp: Date, targetTimezone: string = 'Asia/Kolkata'): Date => {
+    const utcDate = new Date(utcTimestamp);
+    const options: Intl.DateTimeFormatOptions = { timeZone: targetTimezone };
+    const dateString = utcDate.toLocaleString('en-US', options);
+    return new Date(dateString);
+}
+
 export const generatePagination = (currentPage: number, totalPages: number) => {
     // If the total number of pages is 7 or less,
     // display all pages without any ellipsis.

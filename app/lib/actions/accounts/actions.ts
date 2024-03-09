@@ -4,15 +4,16 @@ import { AccountStatusType, PaymentType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { prisma } from '../../db';
-import { getUserSession } from '../auth/actions';
 import { ITEMS_PER_PAGE } from '../../constants';
+import { prisma } from '../../db';
+import { convertUTCtoUserTimezone } from '../../utils';
+import { getUserSession } from '../auth/actions';
 
 const FormSchema = z.object({
   bookId: z.coerce.number(),
   customerId: z.coerce.number(),
   amount: z.coerce.number().min(1),
-  openedAt: z.coerce.date().max(new Date()),
+  openedAt: z.coerce.date(),
   dueDate: z.coerce.date(),
   status: z.enum([AccountStatusType.OPEN, AccountStatusType.CLOSED]),
   paymentType: z.enum([PaymentType.CASH, PaymentType.UPI])
@@ -54,6 +55,10 @@ export async function addAccount(prevState: State, formData: FormData) {
   // Prepare data for insertion into the database
   const { bookId, customerId, amount, openedAt, dueDate, paymentType } = validatedFields.data;
   try {
+    if (openedAt.getTime() > convertUTCtoUserTimezone(new Date()).getTime()) {
+      throw new Error('Account open date is in future.')
+    }
+
     if (dueDate.getTime() < openedAt.getTime()) {
       throw new Error('Due date is less than opened date.')
     }
@@ -113,6 +118,10 @@ export async function updateAccount(accountId: number, formData: FormData) {
   // Prepare data for insertion into the database
   const { bookId, customerId, amount, openedAt, dueDate, status, paymentType } = validatedFields.data;
   try {
+    if (openedAt.getTime() > convertUTCtoUserTimezone(new Date()).getTime()) {
+      throw new Error('Account open date is in future.')
+    }
+
     if (dueDate.getTime() < openedAt.getTime()) {
       throw new Error('Due date is less than opened date.')
     }

@@ -6,11 +6,12 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { prisma } from '../../db';
 import { getUserSession } from '../auth/actions';
+import { convertUTCtoUserTimezone } from '../../utils';
 
 const FormSchema = z.object({
   bookId: z.coerce.number(),
   name: z.string().min(2),
-  date: z.coerce.date().max(new Date()),
+  date: z.coerce.date(),
   amount: z.coerce.number().min(0),
 })
 
@@ -47,6 +48,10 @@ export async function addExpense(prevState: State, formData: FormData) {
   // Prepare data for insertion into the database
   const { bookId, name, date, amount } = validatedFields.data;
   try {
+    if (date.getTime() > convertUTCtoUserTimezone(new Date()).getTime()) {
+      throw new Error('Expense date is in future.')
+    }
+
     const { bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
@@ -97,6 +102,10 @@ export async function updateExpense(expenseId: number, formData: FormData) {
   // Prepare data for insertion into the database
   const { bookId, name, date, amount } = validatedFields.data;
   try {
+    if (date.getTime() > convertUTCtoUserTimezone(new Date()).getTime()) {
+      throw new Error('Expense date is in future.')
+    }
+
     const { bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')

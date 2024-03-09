@@ -7,13 +7,14 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { prisma } from '../../db';
 import { getUserSession } from '../auth/actions';
+import { convertUTCtoUserTimezone } from '../../utils';
 
 const FormSchema = z.object({
   bookId: z.coerce.number(),
   customerId: z.coerce.number(),
   accountId: z.coerce.number(),
   amount: z.coerce.number().min(1),
-  date: z.coerce.date().max(new Date()),
+  date: z.coerce.date(),
   paymentType: z.enum([PaymentType.CASH, PaymentType.UPI])
 })
 
@@ -52,6 +53,9 @@ export async function addTransaction(prevState: State, formData: FormData) {
   // Prepare data for insertion into the database
   const { bookId, customerId, accountId, amount, date, paymentType } = validatedFields.data;
   try {
+    if (date.getTime() > convertUTCtoUserTimezone(new Date()).getTime()) {
+      throw new Error('Transaction date is in future.')
+    }
     const { id: staffId, bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
@@ -114,6 +118,10 @@ export async function updateTransaction(transactionId: number, formData: FormDat
   // Prepare data for insertion into the database
   const { bookId, customerId, accountId, amount, date, paymentType } = validatedFields.data;
   try {
+    if (date.getTime() > convertUTCtoUserTimezone(new Date()).getTime()) {
+      throw new Error('Transaction date is in future.')
+    }
+
     const { id: staffId, bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
