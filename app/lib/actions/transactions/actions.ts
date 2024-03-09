@@ -258,7 +258,6 @@ export async function getTransactionPages(bookId: number, customerId: number, ac
         }
       }
     })
-    console.log("No of transaction records are " + count)
     const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {

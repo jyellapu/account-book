@@ -22,7 +22,7 @@ export default function NavLinks() {
   const pathname = usePathname();
   const bookId = pathname.split("/")[2];
   const prefixPath = `/books/${bookId}`;
-  console.log(bookId);
+
   return (
     <>
       {links.map((link) => {

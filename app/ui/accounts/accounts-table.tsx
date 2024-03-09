@@ -30,8 +30,6 @@ export default async function AccountsTable({
     customerId,
     currentPage
   );
-  console.log("Inside account table");
-  console.log(customerId);
   return (
     <div className="md:block mt-6">
       <div className="inline-block min-w-full align-middle">

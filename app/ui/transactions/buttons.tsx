@@ -58,7 +58,6 @@ export function DeleteTransaction({
   accountId: number;
   transactionId: number;
 }) {
-  console.log("Inside delete transaction %d %d", customerId, accountId);
   const deleteTransactionWithId = deleteTransaction.bind(
     null,
     bookId,

@@ -25,7 +25,6 @@ export async function authenticate(
 export async function getUserSession() {
     try {
         const userSession = await auth();
-        console.log('user session on server side is ', userSession)
         if (!userSession || !userSession.user || !userSession.user.email) {
             throw new Error("User session is empty.")
         }

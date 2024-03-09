@@ -256,7 +256,6 @@ export async function getCustomerAccountPages(bookId: number, customerId: number
         }
       }
     })
-    console.log("No of customer account records are " + count)
     const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {

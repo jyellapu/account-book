@@ -56,8 +56,6 @@ export async function getCardData(bookId: number) {
         totalAmountGivenPromise,
         totalAmountCollectedPromise
     ])
-
-    console.log(data)
     const totalCustomers = data[0]._count.id
     const totalOpenAccounts = data[1]._count.id
     const totalAmountGiven = Number(data[2]._sum.amount)

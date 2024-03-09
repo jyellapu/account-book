@@ -11,7 +11,7 @@ export default async function CustomerCardTable({
   currentPage: number;
 }) {
   const customers = await getFilteredCustomers(bookId, query, currentPage);
-  console.log(customers);
+
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">

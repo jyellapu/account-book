@@ -193,8 +193,6 @@ export async function getCustomerById(bookId: number, customerId: number) {
 }
 
 export async function getFilteredCustomers(bookId: number, query: string, currentPage: number) {
-  const session = await auth()
-  console.log('session in server side is %O', session)
   try {
     const { bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
