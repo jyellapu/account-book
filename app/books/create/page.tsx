@@ -3,6 +3,7 @@
 import { State, addBook } from "@/app/lib/actions/books/actions";
 import AccountBookLogo from "@/app/ui/account-logo";
 import { lusitana } from "@/app/ui/fonts";
+import { SubmitButton } from "@/app/ui/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,7 +63,7 @@ export default function Page() {
             <Button asChild variant="secondary">
               <Link href="/books">Cancel</Link>
             </Button>
-            <Button type="submit">Add Book</Button>
+            <SubmitButton text={"Add Book"} />
           </div>
         </form>
       </div>

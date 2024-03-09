@@ -2,6 +2,7 @@
 
 import { State, addExpense } from "@/app/lib/actions/expenses/actions";
 import { lusitana } from "@/app/ui/fonts";
+import { SubmitButton } from "@/app/ui/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -96,7 +97,7 @@ export default function Page({ params }: { params: { bookId: number } }) {
           <Button asChild variant="secondary">
             <Link href={`/books/${bookId}/dashboard/expenses`}>Cancel</Link>
           </Button>
-          <Button type="submit">Add Expense</Button>
+          <SubmitButton text={"Add Expense"} />
         </div>
       </form>
     </div>

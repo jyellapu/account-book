@@ -3,6 +3,7 @@
 import { State, addAccount } from "@/app/lib/actions/accounts/actions";
 import { DEFAULT_DUE_DATE_INTERVAL_IN_DAYS } from "@/app/lib/constants";
 import { lusitana } from "@/app/ui/fonts";
+import { SubmitButton } from "@/app/ui/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -169,7 +170,7 @@ export default function Page({
               Cancel
             </Link>
           </Button>
-          <Button type="submit">Add Account</Button>
+          <SubmitButton text={"Add Account"} />
         </div>
       </form>
     </div>
