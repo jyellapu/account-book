@@ -1,4 +1,5 @@
 import { getCustomerAccountPages } from "@/app/lib/actions/accounts/actions";
+import { getCustomerById } from "@/app/lib/actions/customers/actions";
 import AccountsTable from "@/app/ui/accounts/accounts-table";
 import { AddAccount } from "@/app/ui/accounts/buttons";
 import { AccountTableSkeleton } from "@/app/ui/accounts/skeletons";
@@ -22,12 +23,17 @@ export default async function Page({
   const bookId = Number(params.bookId);
   const customerId = Number(params.customerId);
   const currentPage = Number(searchParams?.page) || 1;
+  const customer = await getCustomerById(bookId, customerId);
   const totalPages = await getCustomerAccountPages(bookId, customerId);
   return (
     <div className="w-full">
       <div className="flex w-full items-center">
         <BackButton href={`/books/${bookId}/dashboard/customers/`} />
-        <h1 className={`${lusitana.className} text-xl`}>Customer Accounts</h1>
+        <h1
+          className={`${lusitana.className} text-xl whitespace-nowrap truncate`}
+        >
+          {customer?.firstName ? customer.firstName + "'s" : ""} Accounts
+        </h1>
       </div>
       <div className="mt-4 flex items-center justify-end gap-2 md:mt-8">
         <AddAccount bookId={bookId} customerId={params.customerId} />

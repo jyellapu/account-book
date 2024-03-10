@@ -40,7 +40,9 @@ export default async function DailySlipsTable({
                 {transactions.map((transaction) => (
                   <TableRow key={transaction.id}>
                     <TableCell className="whitespace-nowrap">
-                      {transaction.account.customer.firstName}
+                      {transaction.account.customer.firstName +
+                        " " +
+                        transaction.account.customer.lastName}
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
                       {formatCurrency(transaction.amount)}

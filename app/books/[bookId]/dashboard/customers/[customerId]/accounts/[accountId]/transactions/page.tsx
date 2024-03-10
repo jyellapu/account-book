@@ -1,4 +1,5 @@
 import { getCustomerAccountById } from "@/app/lib/actions/accounts/actions";
+import { getCustomerById } from "@/app/lib/actions/customers/actions";
 import {
   getCustomerPaidAmount,
   getTransactionPages,
@@ -33,6 +34,7 @@ export default async function Page({
   const accountId = Number(params.accountId);
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await getTransactionPages(bookId, customerId, accountId);
+  const customer = await getCustomerById(bookId, customerId);
   const account = await getCustomerAccountById(bookId, customerId, accountId);
   const totalAmountPaid = await getCustomerPaidAmount(
     bookId,
@@ -45,7 +47,12 @@ export default async function Page({
         <BackButton
           href={`/books/${bookId}/dashboard/customers/${customerId}/accounts`}
         />
-        <h1 className={`${lusitana.className} text-xl`}>Transactions</h1>
+        <h1
+          className={`${lusitana.className} text-xl whitespace-nowrap truncate`}
+        >
+          {customer?.firstName ? customer.firstName + "'s" : ""} Account
+          Transactions
+        </h1>
       </div>
       <div className="mt-4 flex items-center justify-end gap-2 md:mt-8">
         <AddTransaction
