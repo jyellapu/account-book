@@ -39,6 +39,7 @@ export default function Form({
             type="text"
             placeholder="Enter customer's first name"
             className=""
+            minLength={3}
             defaultValue={customer.firstName}
             required
           />
@@ -56,6 +57,7 @@ export default function Form({
             type="text"
             placeholder="Enter customer's last name"
             className=""
+            minLength={1}
             defaultValue={customer.lastName}
             required
           />

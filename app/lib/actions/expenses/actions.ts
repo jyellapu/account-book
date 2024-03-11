@@ -6,11 +6,11 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { prisma } from '../../db';
 import { getUserSession } from '../auth/actions';
-import { convertUTCtoUserTimezone } from '../../utils';
+import { capitalize, convertUTCtoUserTimezone } from '../../utils';
 
 const FormSchema = z.object({
   bookId: z.coerce.number(),
-  name: z.string().min(2),
+  name: z.string().min(2).transform(capitalize),
   date: z.coerce.date(),
   amount: z.coerce.number().min(0),
 })

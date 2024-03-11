@@ -6,9 +6,10 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { prisma } from '../../db';
 import { getUserSession } from '../auth/actions';
+import { capitalize } from '../../utils';
 
 const FormSchema = z.object({
-  name: z.string().min(3),
+  name: z.string().min(3).transform(capitalize),
 })
 
 const AddBook = FormSchema

@@ -63,3 +63,10 @@ export function defaultAvatarUrl(name: string) {
         name || ""
     )}`
 }
+
+export function capitalize(data: string) {
+    if (typeof data !== "string" || data.length === 0) {
+        return data;
+    }
+    return data.charAt(0).toUpperCase() + data.slice(1);
+}

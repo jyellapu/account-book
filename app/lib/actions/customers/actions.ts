@@ -1,17 +1,17 @@
 'use server';
 
 import { ITEMS_PER_PAGE } from '@/app/lib/constants';
-import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { prisma } from '../../db';
+import { capitalize } from '../../utils';
 import { getUserSession } from '../auth/actions';
 
 const FormSchema = z.object({
   bookId: z.coerce.number(),
-  firstName: z.string(),
-  lastName: z.string(),
+  firstName: z.string().min(3).transform(capitalize),
+  lastName: z.string().min(1).transform(capitalize),
   mobileNumber: z.coerce.number()
 })
 
