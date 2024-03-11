@@ -48,6 +48,7 @@ export default function Page({ params }: { params: { bookId: number } }) {
               type="text"
               placeholder="Enter customer's first name"
               className=""
+              minLength={3}
               required
             />
           </div>
@@ -64,6 +65,7 @@ export default function Page({ params }: { params: { bookId: number } }) {
               type="text"
               placeholder="Enter customer's last name"
               className=""
+              minLength={1}
               required
             />
           </div>
