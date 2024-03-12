@@ -224,6 +224,9 @@ export async function getFilteredCustomers(bookId: number, query: string, curren
         lastName: true,
         mobileNumber: true,
       },
+      orderBy: {
+        firstName: 'asc',
+      },
       skip: (currentPage - 1) * ITEMS_PER_PAGE,
       take: ITEMS_PER_PAGE,
     })
