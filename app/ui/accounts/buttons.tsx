@@ -1,7 +1,8 @@
 import { deleteAccount } from "@/app/lib/actions/accounts/actions";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { DeleteButton } from "../client-buttons";
 
 export function AddAccount({
   bookId,
@@ -59,20 +60,5 @@ export function DeleteAccount({
     accountId
   );
 
-  return (
-    <>
-      <form action={deleteAccountWithId}>
-        <Button
-          variant={"destructive"}
-          className="rounded-md border p-2"
-          type="submit"
-        >
-          <div>
-            <span className="sr-only">Close Account</span>
-            <TrashIcon className="w-5" />
-          </div>
-        </Button>
-      </form>
-    </>
-  );
+  return <DeleteButton action={deleteAccountWithId} />;
 }

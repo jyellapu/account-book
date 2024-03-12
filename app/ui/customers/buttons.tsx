@@ -1,7 +1,8 @@
 import { deleteCustomer } from "@/app/lib/actions/customers/actions";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { DeleteButton } from "../client-buttons";
 
 export function AddCustomer({ bookId }: { bookId: number }) {
   return (
@@ -41,20 +42,5 @@ export function DeleteCustomer({
   customerId: number;
 }) {
   const deleteCustomerWithId = deleteCustomer.bind(null, bookId, customerId);
-  return (
-    <>
-      <form action={deleteCustomerWithId}>
-        <Button
-          variant={"destructive"}
-          className="rounded-md border p-2"
-          type="submit"
-        >
-          <div>
-            <span className="sr-only">Delete</span>
-            <TrashIcon className="w-5" />
-          </div>
-        </Button>
-      </form>
-    </>
-  );
+  return <DeleteButton action={deleteCustomerWithId} />;
 }

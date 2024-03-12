@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon, MoveLeftIcon } from "lucide-react";
+import { ArrowLeftIcon } from "lucide-react";
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 

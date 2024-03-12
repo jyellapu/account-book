@@ -1,7 +1,8 @@
 import { deleteTransaction } from "@/app/lib/actions/transactions/actions";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { DeleteButton } from "../client-buttons";
 
 export function AddTransaction({
   bookId,
@@ -65,20 +66,5 @@ export function DeleteTransaction({
     accountId,
     transactionId
   );
-  return (
-    <>
-      <form action={deleteTransactionWithId}>
-        <Button
-          variant={"destructive"}
-          className="rounded-md border p-2"
-          type="submit"
-        >
-          <div>
-            <span className="sr-only">Delete Transaction</span>
-            <TrashIcon className="w-5" />
-          </div>
-        </Button>
-      </form>
-    </>
-  );
+  return <DeleteButton action={deleteTransactionWithId} />;
 }

@@ -1,7 +1,8 @@
 import { deleteBook } from "@/app/lib/actions/books/actions";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { DeleteButton } from "../client-buttons";
 
 export function AddBook() {
   return (
@@ -29,20 +30,5 @@ export function UpdateBook({ id }: { id: number }) {
 
 export function DeleteBook({ id }: { id: number }) {
   const deleteBookWithId = deleteBook.bind(null, id);
-  return (
-    <>
-      <form action={deleteBookWithId}>
-        <Button
-          variant={"destructive"}
-          className="rounded-md border p-2"
-          type="submit"
-        >
-          <div>
-            <span className="sr-only">Delete</span>
-            <TrashIcon className="w-5" />
-          </div>
-        </Button>
-      </form>
-    </>
-  );
+  return <DeleteButton action={deleteBookWithId} />;
 }
