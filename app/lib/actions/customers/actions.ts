@@ -77,7 +77,7 @@ export async function addCustomer(prevState: State, formData: FormData) {
   redirect(`/books/${bookId}/dashboard/customers`);
 }
 
-export async function updateCustomer(customerId: number, formData: FormData) {
+export async function updateCustomer(customerId: number, prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = UpdateCustomer.safeParse({
     bookId: formData.get('bookId'),

@@ -2,7 +2,7 @@
 
 import { State, addCustomer } from "@/app/lib/actions/customers/actions";
 import { lusitana } from "@/app/ui/fonts";
-import { SubmitButton } from "@/app/ui/submit-button";
+import { SubmitButton } from "@/app/ui/client-buttons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

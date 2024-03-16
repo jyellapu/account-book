@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { prisma } from '../../db';
 import { getUserSession } from '../auth/actions';
 import { capitalize, convertUTCtoUserTimezone } from '../../utils';
+import { DateRange } from 'react-day-picker';
 
 const FormSchema = z.object({
   bookId: z.coerce.number(),
@@ -81,7 +82,7 @@ export async function addExpense(prevState: State, formData: FormData) {
   redirect(`/books/${bookId}/dashboard/expenses`);
 }
 
-export async function updateExpense(expenseId: number, formData: FormData) {
+export async function updateExpense(expenseId: number, prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = UpdateExpense.safeParse({
     bookId: formData.get('bookId'),
@@ -184,16 +185,28 @@ export async function getExpenseById(bookId: number, expenseId: number) {
 
 }
 
-export async function getFilteredExpenses(bookId: number, date: string, currentPage: number) {
+export async function getFilteredExpenses(bookId: number, date: DateRange, currentPage: number) {
   try {
     const { bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
     }
+
+    if (!date.from) {
+      date.from = new Date()
+    }
+
+    if (date.to && date.from > date.to) {
+      throw new Error("Invalid start date and end date.")
+    }
+
     return await prisma.expense.findMany({
       where: {
         bookId: bookId,
-        date: new Date(date)
+        date: {
+          gte: date.from,
+          lte: date.to || date.from
+        }
       },
       select: {
         id: true,
@@ -202,7 +215,7 @@ export async function getFilteredExpenses(bookId: number, date: string, currentP
         amount: true,
       },
       orderBy: {
-        updatedAt: 'desc'
+        date: 'asc'
       },
       skip: (currentPage - 1) * ITEMS_PER_PAGE,
       take: ITEMS_PER_PAGE
@@ -214,17 +227,28 @@ export async function getFilteredExpenses(bookId: number, date: string, currentP
 
 }
 
-export async function getExpensePages(bookId: number, date: string) {
+export async function getExpensePages(bookId: number, date: DateRange) {
   try {
     const { bookIds } = await getUserSession()
     if (!bookIds.includes(bookId)) {
       throw new Error('Invalid book id.')
     }
 
+    if (!date.from) {
+      date.from = new Date()
+    }
+
+    if (date.to && date.from > date.to) {
+      throw new Error("Invalid start date and end date.")
+    }
+
     const count = await prisma.expense.count({
       where: {
         bookId: bookId,
-        date: new Date(date)
+        date: {
+          gte: date.from,
+          lte: date.to || date.from,
+        }
       }
     })
     const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);

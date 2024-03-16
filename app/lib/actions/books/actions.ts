@@ -60,7 +60,7 @@ export async function addBook(prevState: State, formData: FormData) {
   redirect('/books');
 }
 
-export async function updateBook(id: number, formData: FormData) {
+export async function updateBook(id: number, prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = UpdateBook.safeParse({
     name: formData.get('name'),

@@ -1,4 +1,5 @@
-import { updateAccount } from "@/app/lib/actions/accounts/actions";
+"use client";
+import { State, updateAccount } from "@/app/lib/actions/accounts/actions";
 import { Account } from "@/app/lib/definitions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,10 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AccountStatusType, PaymentType } from "@prisma/client";
 import { format } from "date-fns";
+import { AlertCircleIcon } from "lucide-react";
 import Link from "next/link";
+import { useFormState } from "react-dom";
+import { SubmitButton } from "../client-buttons";
 
 export default function Form({
   bookId,
@@ -17,9 +21,11 @@ export default function Form({
   customerId: number;
   account: Account;
 }) {
+  const initialState: State = { message: null, errors: {} };
   const updateAccountWithId = updateAccount.bind(null, account.id);
+  const [state, dispatch] = useFormState(updateAccountWithId, initialState);
   return (
-    <form action={updateAccountWithId}>
+    <form action={dispatch}>
       <div className="rounded-md bg-secondary/40 p-4 md:p-8">
         <div className="hidden mb-4">
           <Label htmlFor="bookId" className="mb-2 block text-sm font-medium">
@@ -133,6 +139,18 @@ export default function Form({
             </div>
           </RadioGroup>
         </div>
+        <div
+          className="flex h-8 items-end space-x-1"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {state.message && (
+            <>
+              <AlertCircleIcon className="h-5 w-5 text-red-500" />
+              <p className="text-sm text-red-500">{state.message}</p>
+            </>
+          )}
+        </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Button asChild variant="secondary">
@@ -142,7 +160,7 @@ export default function Form({
             Cancel
           </Link>
         </Button>
-        <Button type="submit">Edit Account</Button>
+        <SubmitButton text="Edit Account" />
       </div>
     </form>
   );

@@ -12,6 +12,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
+import { useFormStatus } from "react-dom";
+
+export function SubmitButton({ text }: { text: string | "Add" }) {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button aria-disabled={pending} disabled={pending}>
+      {text}
+    </Button>
+  );
+}
 
 export function DeleteButton({
   action,

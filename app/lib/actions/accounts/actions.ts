@@ -93,7 +93,7 @@ export async function addAccount(prevState: State, formData: FormData) {
   redirect(`/books/${bookId}/dashboard/customers/${customerId}/accounts`);
 }
 
-export async function updateAccount(accountId: number, formData: FormData) {
+export async function updateAccount(accountId: number, prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = UpdateAccount.safeParse({
     bookId: formData.get('bookId'),
