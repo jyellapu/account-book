@@ -4,9 +4,9 @@ import ExpenseTable from "@/app/ui/expenses/expense-table";
 import { ExpenseTableSkeleton } from "@/app/ui/expenses/skeletons";
 import { lusitana } from "@/app/ui/fonts";
 import Pagination from "@/app/ui/pagination";
-import SearchByDate from "@/app/ui/search-by-date";
-import { format } from "date-fns";
+import { DatePickerWithRange } from "@/app/ui/search-by-date";
 import { Suspense } from "react";
+import { DateRange } from "react-day-picker";
 
 export default async function Page({
   params,
@@ -17,12 +17,16 @@ export default async function Page({
   };
   searchParams?: {
     page?: number;
-    date?: string;
+    startDate?: string;
+    endDate?: string;
   };
 }) {
   const bookId = Number(params.bookId);
   const currentPage = Number(searchParams?.page) || 1;
-  const date = searchParams?.date || format(new Date(), "yyyy-MM-dd");
+  const date: DateRange = {
+    from: new Date(searchParams?.startDate || new Date()),
+    to: new Date(searchParams?.endDate || new Date()),
+  };
   const totalPages = await getExpensePages(bookId, date);
 
   return (
@@ -31,7 +35,7 @@ export default async function Page({
         <h1 className={`${lusitana.className} text-xl`}>Expenses</h1>
       </div>
       <div className="mt-4 flex items-center justify-end gap-4 md:mt-8">
-        <SearchByDate></SearchByDate>
+        <DatePickerWithRange></DatePickerWithRange>
         <AddExpense bookId={bookId} />
       </div>
       <Suspense key={bookId} fallback={<ExpenseTableSkeleton />}>

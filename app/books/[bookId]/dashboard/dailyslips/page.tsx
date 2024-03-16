@@ -3,7 +3,7 @@ import DailySlipsTable from "@/app/ui/dailyslips/dailyslips-table";
 import { DailySlipsTableSkeleton } from "@/app/ui/dailyslips/skeletons";
 import { lusitana } from "@/app/ui/fonts";
 import Pagination from "@/app/ui/pagination";
-import SearchByDate from "@/app/ui/search-by-date";
+import { DatePicker } from "@/app/ui/search-by-date";
 import { format } from "date-fns";
 import { Suspense } from "react";
 
@@ -30,7 +30,7 @@ export default async function Page({
         <h1 className={`${lusitana.className} text-xl`}>Daily slips</h1>
       </div>
       <div className="mt-4 flex items-center justify-end gap-2 md:mt-8">
-        <SearchByDate></SearchByDate>
+        <DatePicker></DatePicker>
       </div>
       <Suspense key={bookId} fallback={<DailySlipsTableSkeleton />}>
         <DailySlipsTable

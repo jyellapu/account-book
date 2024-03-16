@@ -1,5 +1,5 @@
 import { getFilteredExpenses } from "@/app/lib/actions/expenses/actions";
-import { formatCurrency } from "@/app/lib/utils";
+import { formatCurrency, formatDateToLocal } from "@/app/lib/utils";
 import {
   Table,
   TableBody,
@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DeleteExpense, UpdateExpense } from "./buttons";
+import { DateRange } from "react-day-picker";
 
 export default async function ExpenseTable({
   bookId,
@@ -17,12 +18,12 @@ export default async function ExpenseTable({
   currentPage,
 }: {
   bookId: number;
-  date: string;
+  date: DateRange;
   currentPage: number;
 }) {
   const expenses = await getFilteredExpenses(bookId, date, currentPage);
   return (
-    <div className="md:block mt-6">
+    <div className="md:block mt-6 overflow-x-auto">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-md bg-secondary/40 p-2">
           <div className="min-w-full md:table">
@@ -30,6 +31,7 @@ export default async function ExpenseTable({
               <TableCaption>List of expenses</TableCaption>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Date</TableHead>
                   <TableHead>Expense</TableHead>
                   <TableHead>Cost</TableHead>
                 </TableRow>
@@ -37,6 +39,9 @@ export default async function ExpenseTable({
               <TableBody>
                 {expenses.map((expense) => (
                   <TableRow key={expense.id}>
+                    <TableCell className="whitespace-nowrap">
+                      {formatDateToLocal(expense.date)}
+                    </TableCell>
                     <TableCell className="whitespace-nowrap">
                       {expense.name}
                     </TableCell>
