@@ -24,8 +24,12 @@ export default async function Page({
   const bookId = Number(params.bookId);
   const currentPage = Number(searchParams?.page) || 1;
   const date: DateRange = {
-    from: new Date(searchParams?.startDate || new Date()),
-    to: new Date(searchParams?.endDate || new Date()),
+    from: new Date(
+      new Date(searchParams?.startDate || new Date()).setUTCHours(0, 0, 0, 0)
+    ),
+    to: new Date(
+      new Date(searchParams?.endDate || new Date()).setUTCHours(0, 0, 0, 0)
+    ),
   };
   const totalPages = await getExpensePages(bookId, date);
 
