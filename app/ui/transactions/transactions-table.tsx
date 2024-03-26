@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DeleteTransaction, UpdateTransaction } from "./buttons";
+import { EMPTY_USER_NAME } from "@/app/lib/constants";
 
 export default async function TransactionTable({
   bookId,
@@ -54,11 +55,7 @@ export default async function TransactionTable({
                     </TableCell>
                     <TableCell>{transaction.paymentType}</TableCell>
                     <TableCell className="whitespace-nowrap">
-                      {transaction.createdByStaff
-                        ? transaction.createdByStaff.firstName +
-                          " " +
-                          transaction.createdByStaff?.lastName
-                        : "--"}
+                      {transaction.createdByStaff?.name || EMPTY_USER_NAME}
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex justify-center gap-2 md:gap-4">

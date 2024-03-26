@@ -234,8 +234,7 @@ export async function getFilteredTransactions(bookId: number, customerId: number
         createdAt: true,
         createdByStaff: {
           select: {
-            firstName: true,
-            lastName: true,
+            name: true
           }
         }
       },
