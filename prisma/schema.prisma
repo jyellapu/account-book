@@ -6,14 +6,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-enum StaffType {
+enum Role {
+  OWNER
   ADMIN
-  EMPLOYEE
+  MEMBER
 }
 
 enum PaymentType {
@@ -28,15 +29,14 @@ enum AccountStatusType {
 
 model Staff {
   id           Int           @id @default(autoincrement())
-  firstName    String
-  lastName     String
-  mobileNumber String        @unique
-  password     String
-  type         StaffType
+  name         String
+  email        String        @unique
+  image        String?
+  mobileNumber String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
-  books        Book[]
   Transaction  Transaction[]
+  books        BookStaffs[]
 }
 
 model Customer {
@@ -52,13 +52,24 @@ model Customer {
 }
 
 model Book {
-  id        Int        @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   name      String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now())
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now())
   customers Customer[]
-  staff     Staff[]
   expenses  Expense[]
+  staff     BookStaffs[]
+}
+
+model BookStaffs {
+  id      Int   @id @default(autoincrement())
+  book    Book  @relation(fields: [bookId], references: [id])
+  staff   Staff @relation(fields: [staffId], references: [id])
+  role    Role
+  bookId  Int
+  staffId Int
+
+  @@index([bookId, staffId])
 }
 
 model Account {
