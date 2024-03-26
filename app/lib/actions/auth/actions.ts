@@ -22,6 +22,10 @@ export async function authenticate(
     }
 }
 
+export async function googleSignIn() {
+    await signIn("google")
+}
+
 export async function getUserSession() {
     try {
         const userSession = await auth();
@@ -30,18 +34,18 @@ export async function getUserSession() {
         }
         const user = await prisma.staff.findFirstOrThrow({
             where: {
-                mobileNumber: userSession.user.email,
+                email: userSession.user.email,
 
             }, select: {
                 id: true,
                 books: {
                     select: {
-                        id: true
+                        bookId: true
                     }
                 }
             }
         })
-        const bookIds = user?.books.map(book => book.id)
+        const bookIds = user?.books.map(book => book.bookId)
         return { id: user.id, bookIds }
     } catch (error) {
         console.log(error)

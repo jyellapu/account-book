@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { prisma } from '../../db';
 import { getUserSession } from '../auth/actions';
 import { capitalize } from '../../utils';
+import { Role } from '@prisma/client';
 
 const FormSchema = z.object({
   name: z.string().min(3).transform(capitalize),
@@ -45,7 +46,10 @@ export async function addBook(prevState: State, formData: FormData) {
       data: {
         name,
         staff: {
-          connect: { id: staffId }
+          create: {
+            staffId: staffId,
+            role: Role.OWNER
+          }
         }
       }
     })
