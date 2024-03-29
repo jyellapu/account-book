@@ -63,8 +63,8 @@ model Book {
 
 model BookStaffs {
   id      Int   @id @default(autoincrement())
-  book    Book  @relation(fields: [bookId], references: [id])
-  staff   Staff @relation(fields: [staffId], references: [id])
+  book    Book  @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  staff   Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
   role    Role
   bookId  Int
   staffId Int
