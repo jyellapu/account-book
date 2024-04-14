@@ -42,7 +42,7 @@ model Staff {
 model Customer {
   id           Int       @id @default(autoincrement())
   firstName    String
-  lastName     String
+  lastName     String?
   mobileNumber String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now())

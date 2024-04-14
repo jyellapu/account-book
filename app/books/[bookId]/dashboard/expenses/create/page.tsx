@@ -20,7 +20,7 @@ export default function Page({ params }: { params: { bookId: number } }) {
   return (
     <div className="w-full">
       <div className="mb-4 flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-xl`}>Add Customer</h1>
+        <h1 className={`${lusitana.className} text-xl`}>Add Expense</h1>
       </div>
       <form action={dispatch}>
         <div className="rounded-md bg-secondary/40 p-4 md:p-8">

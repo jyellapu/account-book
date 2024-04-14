@@ -64,8 +64,7 @@ export default function Form({
             placeholder="Enter customer's last name"
             className=""
             minLength={1}
-            defaultValue={customer.lastName}
-            required
+            defaultValue={customer.lastName || ""}
           />
         </div>
         <div className="mb-4">

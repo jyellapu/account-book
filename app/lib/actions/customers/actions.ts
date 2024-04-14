@@ -1,22 +1,23 @@
-'use server';
+"use server";
 
-import { ITEMS_PER_PAGE } from '@/app/lib/constants';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
-import { prisma } from '../../db';
-import { capitalize } from '../../utils';
-import { getUserSession } from '../auth/actions';
+import { getUserSession } from "@/app/lib/actions/auth/actions";
+import { ITEMS_PER_PAGE } from "@/app/lib/constants";
+import { prisma } from "@/app/lib/db";
+import { Customer } from "@/app/lib/definitions";
+import { capitalize } from "@/app/lib/utils";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
 const FormSchema = z.object({
   bookId: z.coerce.number(),
   firstName: z.string().min(3).transform(capitalize),
-  lastName: z.string().min(1).transform(capitalize),
-  mobileNumber: z.coerce.number()
-})
+  lastName: z.string().transform(capitalize).optional(),
+  mobileNumber: z.coerce.number(),
+});
 
-const AddCustomer = FormSchema
-const UpdateCustomer = FormSchema
+const AddCustomer = FormSchema;
+const UpdateCustomer = FormSchema;
 
 export type State = {
   errors?: {
@@ -30,27 +31,27 @@ export type State = {
 export async function addCustomer(prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = AddCustomer.safeParse({
-    bookId: formData.get('bookId'),
-    firstName: formData.get('firstName'),
-    lastName: formData.get('lastName'),
-    mobileNumber: formData.get('mobileNumber'),
+    bookId: formData.get("bookId"),
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    mobileNumber: formData.get("mobileNumber"),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors)
+    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to create customer.',
+      message: "Missing Fields. Failed to create customer.",
     };
   }
 
   // Prepare data for insertion into the database
   const { bookId, firstName, lastName, mobileNumber } = validatedFields.data;
   try {
-    const { bookIds } = await getUserSession()
+    const { bookIds } = await getUserSession();
     if (!bookIds.includes(bookId)) {
-      throw new Error('Invalid book id.')
+      throw new Error("Invalid book id.");
     }
 
     await prisma.customer.create({
@@ -60,16 +61,16 @@ export async function addCustomer(prevState: State, formData: FormData) {
         mobileNumber: mobileNumber.toString(),
         book: {
           connect: {
-            id: bookId
-          }
-        }
-      }
-    })
+            id: bookId,
+          },
+        },
+      },
+    });
   } catch (error) {
     // If a database error occurs, return a more specific error.
-    console.log(error)
+    console.log(error);
     return {
-      message: 'Database Error: Failed to create customer.',
+      message: "Database Error: Failed to create customer.",
     };
   }
   // Revalidate the cache for the invoices page and redirect the user.
@@ -77,48 +78,52 @@ export async function addCustomer(prevState: State, formData: FormData) {
   redirect(`/books/${bookId}/dashboard/customers`);
 }
 
-export async function updateCustomer(customerId: number, prevState: State, formData: FormData) {
+export async function updateCustomer(
+  customerId: number,
+  prevState: State,
+  formData: FormData
+) {
   // Validate form using Zod
   const validatedFields = UpdateCustomer.safeParse({
-    bookId: formData.get('bookId'),
-    firstName: formData.get('firstName'),
-    lastName: formData.get('lastName'),
-    mobileNumber: formData.get('mobileNumber'),
+    bookId: formData.get("bookId"),
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    mobileNumber: formData.get("mobileNumber"),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors)
+    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to update customer.',
+      message: "Missing Fields. Failed to update customer.",
     };
   }
 
   // Prepare data for insertion into the database
   const { bookId, firstName, lastName, mobileNumber } = validatedFields.data;
   try {
-    const { bookIds } = await getUserSession()
+    const { bookIds } = await getUserSession();
     if (!bookIds.includes(bookId)) {
-      throw new Error('Invalid book id.')
+      throw new Error("Invalid book id.");
     }
 
     await prisma.customer.update({
       where: {
         id: customerId,
-        bookId: bookId
+        bookId: bookId,
       },
       data: {
         firstName,
         lastName,
         mobileNumber: mobileNumber.toString(),
-        updatedAt: new Date()
-      }
-    })
+        updatedAt: new Date(),
+      },
+    });
   } catch (error) {
     // If a database error occurs, return a more specific error.
     return {
-      message: 'Database Error: Failed to update customer.',
+      message: "Database Error: Failed to update customer.",
     };
   }
   // Revalidate the cache for the invoices page and redirect the user.
@@ -127,22 +132,22 @@ export async function updateCustomer(customerId: number, prevState: State, formD
 }
 
 export async function deleteCustomer(bookId: number, customerId: number) {
-  console.log("Deleting customer with id %d", customerId)
+  console.log("Deleting customer with id %d", customerId);
   try {
-    const { bookIds } = await getUserSession()
+    const { bookIds } = await getUserSession();
     if (!bookIds.includes(bookId)) {
-      throw new Error('Invalid book id.')
+      throw new Error("Invalid book id.");
     }
 
     await prisma.customer.delete({
       where: {
         id: customerId,
-        bookId: bookId
-      }
-    })
+        bookId: bookId,
+      },
+    });
   } catch (error) {
-    console.log(error)
-    return { message: 'Database Error: Failed to delete customer' };
+    console.log(error);
+    return { message: "Database Error: Failed to delete customer" };
   }
   revalidatePath(`/books/${bookId}/dashboard/customers`);
 }
@@ -156,47 +161,50 @@ export async function getCustomers() {
         lastName: true,
       },
       orderBy: {
-        updatedAt: 'desc'
-      }
-    })
-    return customers
+        updatedAt: "desc",
+      },
+    });
+    return customers;
   } catch (error) {
-    throw new Error("Failed to get customer details.")
+    throw new Error("Failed to get customer details.");
   }
 }
 
 export async function getCustomerById(bookId: number, customerId: number) {
-  console.log("id in get customer is %d", customerId)
+  console.log("id in get customer is %d", customerId);
   try {
-    const { bookIds } = await getUserSession()
+    const { bookIds } = await getUserSession();
     if (!bookIds.includes(bookId)) {
-      throw new Error('Invalid book id.')
+      throw new Error("Invalid book id.");
     }
     const customer = await prisma.customer.findUnique({
       where: {
         id: customerId,
-        bookId: bookId
+        bookId: bookId,
       },
       select: {
         id: true,
         firstName: true,
         lastName: true,
         mobileNumber: true,
-      }
-    })
-    return customer;
+      },
+    });
+    return customer as Customer;
   } catch (error) {
-    console.log(error)
-    throw new Error('Failed to get customer with id ')
+    console.log(error);
+    throw new Error("Failed to get customer with id ");
   }
-
 }
 
-export async function getFilteredCustomers(bookId: number, query: string, currentPage: number) {
+export async function getFilteredCustomers(
+  bookId: number,
+  query: string,
+  currentPage: number
+) {
   try {
-    const { bookIds } = await getUserSession()
+    const { bookIds } = await getUserSession();
     if (!bookIds.includes(bookId)) {
-      throw new Error('Invalid book id.')
+      throw new Error("Invalid book id.");
     }
 
     return await prisma.customer.findMany({
@@ -206,17 +214,16 @@ export async function getFilteredCustomers(bookId: number, query: string, curren
           {
             firstName: {
               contains: query,
-              mode: 'insensitive'
-
-            }
+              mode: "insensitive",
+            },
           },
           {
             lastName: {
               contains: query,
-              mode: 'insensitive'
-            }
-          }
-        ]
+              mode: "insensitive",
+            },
+          },
+        ],
       },
       select: {
         id: true,
@@ -225,23 +232,22 @@ export async function getFilteredCustomers(bookId: number, query: string, curren
         mobileNumber: true,
       },
       orderBy: {
-        firstName: 'asc',
+        firstName: "asc",
       },
       skip: (currentPage - 1) * ITEMS_PER_PAGE,
       take: ITEMS_PER_PAGE,
-    })
+    });
   } catch (error) {
-    console.log(error)
-    throw new Error('Failed to get filtered customer.')
+    console.log(error);
+    throw new Error("Failed to get filtered customer.");
   }
-
 }
 
 export async function getCustomersPages(bookId: number, query: string) {
   try {
-    const { bookIds } = await getUserSession()
+    const { bookIds } = await getUserSession();
     if (!bookIds.includes(bookId)) {
-      throw new Error('Invalid book id.')
+      throw new Error("Invalid book id.");
     }
 
     const count = await prisma.customer.count({
@@ -251,23 +257,22 @@ export async function getCustomersPages(bookId: number, query: string) {
           {
             firstName: {
               contains: query,
-              mode: 'insensitive'
-
-            }
+              mode: "insensitive",
+            },
           },
           {
             lastName: {
               contains: query,
-              mode: 'insensitive'
-            }
-          }
-        ]
-      }
-    })
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+    });
     const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to get total customer pages.")
+    throw new Error("Failed to get total customer pages.");
   }
 }

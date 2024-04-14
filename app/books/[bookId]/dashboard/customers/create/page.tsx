@@ -65,8 +65,6 @@ export default function Page({ params }: { params: { bookId: number } }) {
               type="text"
               placeholder="Enter customer's last name"
               className=""
-              minLength={1}
-              required
             />
           </div>
           <div className="mb-4">
