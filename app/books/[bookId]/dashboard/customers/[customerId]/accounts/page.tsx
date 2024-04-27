@@ -4,6 +4,7 @@ import AccountsTable from "@/app/ui/accounts/accounts-table";
 import { AddAccount } from "@/app/ui/accounts/buttons";
 import { AccountTableSkeleton } from "@/app/ui/accounts/skeletons";
 import { BackButton } from "@/app/ui/buttons";
+import { EmptyScreen } from "@/app/ui/empty-screen";
 import { lusitana } from "@/app/ui/fonts";
 import Pagination from "@/app/ui/pagination";
 import { Suspense } from "react";
@@ -42,11 +43,15 @@ export default async function Page({
         key={`${bookId}-${customerId}`}
         fallback={<AccountTableSkeleton />}
       >
-        <AccountsTable
-          bookId={bookId}
-          customerId={customerId}
-          currentPage={currentPage}
-        ></AccountsTable>
+        {!totalPages ? (
+          <EmptyScreen headline="There are no accounts"></EmptyScreen>
+        ) : (
+          <AccountsTable
+            bookId={bookId}
+            customerId={customerId}
+            currentPage={currentPage}
+          ></AccountsTable>
+        )}
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />

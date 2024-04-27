@@ -5,6 +5,7 @@ import {
   getTransactionPages,
 } from "@/app/lib/actions/transactions/actions";
 import { BackButton } from "@/app/ui/buttons";
+import { EmptyScreen } from "@/app/ui/empty-screen";
 import { lusitana } from "@/app/ui/fonts";
 import Pagination from "@/app/ui/pagination";
 import AccountDetailsCard from "@/app/ui/transactions/account-details-card";
@@ -74,12 +75,16 @@ export default async function Page({
         key={`${bookId}-${customerId}-${accountId}-transaction-table`}
         fallback={<TransactionsTableSkeleton />}
       >
-        <TransactionTable
-          bookId={bookId}
-          customerId={customerId}
-          accountId={accountId}
-          currentPage={currentPage}
-        ></TransactionTable>
+        {!totalPages ? (
+          <EmptyScreen headline="There are no transactions"></EmptyScreen>
+        ) : (
+          <TransactionTable
+            bookId={bookId}
+            customerId={customerId}
+            accountId={accountId}
+            currentPage={currentPage}
+          ></TransactionTable>
+        )}
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />

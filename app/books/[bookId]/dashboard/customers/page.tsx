@@ -2,6 +2,7 @@ import { getCustomersPages } from "@/app/lib/actions/customers/actions";
 import { AddCustomer } from "@/app/ui/customers/buttons";
 import CustomerCardTable from "@/app/ui/customers/customer-card-table";
 import { CustomerCardTableSkeleton } from "@/app/ui/customers/skeletons";
+import { EmptyScreen } from "@/app/ui/empty-screen";
 import { lusitana } from "@/app/ui/fonts";
 import Pagination from "@/app/ui/pagination";
 import Search from "@/app/ui/search";
@@ -37,11 +38,15 @@ export default async function Page({
         key={query + currentPage}
         fallback={<CustomerCardTableSkeleton />}
       >
-        <CustomerCardTable
-          bookId={bookId}
-          query={query}
-          currentPage={currentPage}
-        ></CustomerCardTable>
+        {!totalPages ? (
+          <EmptyScreen headline="There are no customers"></EmptyScreen>
+        ) : (
+          <CustomerCardTable
+            bookId={bookId}
+            query={query}
+            currentPage={currentPage}
+          ></CustomerCardTable>
+        )}
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />
