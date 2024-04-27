@@ -44,12 +44,12 @@ export default async function Page({
       <div className="flex w-full items-center justify-between">
         <h1 className={`${lusitana.className} text-xl`}>Expenses</h1>
       </div>
-      <div className="mt-4 md:mt-8">
-        <p className={`${lusitana.className}`}>{`Total : ${formatCurrency(
-          expenseTotal
-        )}`}</p>
+      <div className="mt-4 md:mt-8 w-full">
+        <p
+          className={`${lusitana.className} text-center md:text-left`}
+        >{`Total : ${formatCurrency(expenseTotal)}`}</p>
       </div>
-      <div className="mt-4 flex items-center justify-end gap-4">
+      <div className="mt-4 flex items-center justify-between gap-4 md:justify-end">
         <DatePickerWithRange></DatePickerWithRange>
         <AddExpense bookId={bookId} />
       </div>
